@@ -18,4 +18,10 @@
   (t/is (core/leap? 2000))
   (t/is (not (core/leap? 1900))))
 
+(t/deftest my-async-test
+  (t/async done
+           (core/async-leap? 1996 (fn [result]
+                                    (t/is (true? result))
+                                    (done)))))
+
 (set! *main-cli-fn* #(t/run-tests))
