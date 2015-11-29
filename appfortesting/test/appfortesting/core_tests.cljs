@@ -20,8 +20,19 @@
 
 (t/deftest my-async-test
   (t/async done
-           (core/async-leap? 1996 (fn [result]
+           ;; Exchange commenting of next two expressions to change tests from failing to succeeding.
+           (core/async-leap? 1997 (fn [result]
                                     (t/is (true? result))
-                                    (done)))))
+                                   (done)))
+           ;; (core/async-leap? 1996 (fn [result]
+           ;;                          (t/is (true? result))
+           ;;                          (done)))
+           ))
 
 (set! *main-cli-fn* #(t/run-tests))
+
+(defmethod t/report [::t/default :end-run-tests]
+  [m]
+  (if (t/successful? m)
+    (set! (.-exitCode js/process) 0)
+    (set! (.-exitCode js/process) 1)))
