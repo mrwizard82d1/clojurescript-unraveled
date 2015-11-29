@@ -1,12 +1,11 @@
 (ns leapyears.core
-  (:require [goog.dom :as gdom]
-            [goog.events :as gevents]
+  (:require [dommy.core :as dom]
             [cljs.reader :refer (read-string)]))
 
 (enable-console-print!)
 
-(def input (gdom/getElement "year"))
-(def result (gdom/getElement "result"))
+(def input (dom/sel1 :#year))
+(def result (dom/sel1 :#result))
 
 (defn leap? [year]
   (or (and (zero? (js-mod year 4))
@@ -15,9 +14,9 @@
 
 (defn on-change [event]
   (let [target (.-target event)
-        value (read-string (.-value target))]
+        value (read-string (dom/value target))]
     (if (leap? value)
-      (set! (.-innerHTML result) "YES")
-      (set! (.-innerHTML result) "NO"))))
+      (dom/set-html! result "YES")
+      (dom/set-html! result "NO"))))
 
-(gevents/listen input "keyup" on-change)
+(dom/listen! input :keyup on-change)
